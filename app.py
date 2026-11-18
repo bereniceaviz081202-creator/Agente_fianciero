@@ -38,22 +38,23 @@ class AgenteMonitorYahoo:
             try: return float(df.loc[nombre].iloc[0])
             except: return 0
         datos = {
-            "empresa": f"{info.get('longName', ticker)} ({ticker})",
-            "ticker": ticker, "precio": info.get("currentPrice", 0),
-            "moneda": info.get("currency","USD"), "sector": info.get("sector","N/A"),
-            "activo_circulante": get(balance,"Total Current Assets"),
-            "activo_circulante":get(balance,"Total Current Assets"),
-            "pasivo_circulante":get(balance,"Total Current Liabilities"),
-            "activo_total":get(balance,"Total Assets"),
-            "pasivo_total":get(balance,"Total Liabilities Net Minority Interest"),
-            "patrimonio":get(balance,"Total Stockholder Equity"),
-            "utilidades_retenidas":get(balance,"Retained Earnings"),
-            "ventas":get(resultados,"Total Revenue"),
-            "utilidad_neta": get(resultados, "Net Income"),
-            "flujo_operativo": get(flujo, "Operating Cash Flow"),
-        }
-        memoria.escribir(self.nombre, "datos_crudos", datos)
-        return datos
+            "empresa":obtener(info,"longName"),
+            "precio":obtener(info,"currentPrice"),
+            "moneda":obtener(info,"currency"),
+            "sector":obtener(info,"sector"),
+            "activo_circulante":obtener(balance,"Total Current Assets"),
+            "pasivo_circulante":obtener(balance,"Total Current Liabilities"),
+            "activo_total":obtener(balance,"Total Assets"),
+            "pasivo_total":obtener(balance,"Total Liabilities Net Minority Interest"),
+            "patrimonio":obtener(balance,"Total Stockholder Equity"),
+            "utilidades_retenidas":obtener(balance,"Retained Earnings"),
+            "ventas":obtener(resultados,"Total Revenue"),
+            "utilidad_neta":obtener(resultados,"Net Income"),
+            "utilidad_operativa":obtener(resultados,"Operating Income"),
+            "flujo_operativo":obtener(flujo,"Operating Cash Flow"),
+            },
+            memoria.escribir(self.nombre, "datos_crudos", datos)
+            return datos
 
 # ================= AGENTE 2: ANALISTA =================
 class AgenteAnalista:
