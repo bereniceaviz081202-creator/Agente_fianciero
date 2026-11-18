@@ -37,7 +37,7 @@ class AgenteMonitorYahoo:
         def get(df, nombre):
             try: return float(df.loc[nombre].iloc[0])
             except: return 0
-      datos = {
+        datos = {
             "empresa":obtener(info,"longName"),
             "precio":obtener(info,"currentPrice"),
             "moneda":obtener(info,"currency"),
@@ -52,9 +52,9 @@ class AgenteMonitorYahoo:
             "utilidad_neta":obtener(resultados,"Net Income"),
             "utilidad_operativa":obtener(resultados,"Operating Income"),
             "flujo_operativo":obtener(flujo,"Operating Cash Flow"),
-            },
-        memoria.escribir(self.nombre, "datos_crudos", datos)
-            return datos
+         },
+         memoria.escribir(self.nombre, "datos_crudos", datos)
+         return datos
 
 # ================= AGENTE 2: ANALISTA =================
 class AgenteAnalista:
