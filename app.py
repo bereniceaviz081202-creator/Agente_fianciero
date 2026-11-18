@@ -34,9 +34,11 @@ class AgenteMonitorYahoo:
         balance = tk.balance_sheet
         resultados = tk.financials
         flujo = tk.cashflow
-        def get(df, nombre):
-            try: return float(df.loc[nombre].iloc[0])
-            except: return 0
+        def obtener(df,nombre):
+            intentar:
+                regresar flotar(df.loc[nombre].iloc[0])
+            excepto:
+                regresar 0
         datos = {
             "empresa":obtener(info,"longName"),
             "precio":obtener(info,"currentPrice"),
