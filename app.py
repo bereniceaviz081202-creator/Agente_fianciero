@@ -55,14 +55,13 @@ class MemoriaCompartida:
 
 MEMORIA = MemoriaCompartida()
 
-CACHE = {}
 CACHE_TIEMPO = 7 * 24 * 3600
 
 # ================= AGENTE 1: MONITOR YAHOO =================
 class AgenteMonitorYahoo:
     """Agente 1: Solo se encarga de buscar en Yahoo Finance"""
     nombre = "AGENTE-MONITOR-YAHOO"
-def ejecutar(self, ticker):
+    def ejecutar(self, ticker, memoria):
     ticker = ticker.strip().upper()
     
     # 1. Buscar en lo guardado
@@ -240,9 +239,10 @@ def buscar():
         return jsonify({"error":"Escribe un ticker"}), 400
 
     # Si ya está en memoria, no le pedimos a Yahoo
-    if ticker in MEMORIA:
-        return jsonify(MEMORIA[ticker])
-
+for item in MEMORIA.historial:
+    if item.get("ticker") == ticker:
+        return jsonify(item)
+    
     try:
         # AQUÍ VA TU CÓDIGO QUE YA TIENES PARA PEDIRLE A YAHOO
         # ... no lo borres, déjalo tal cual ...
@@ -383,4 +383,4 @@ def sugerencias():
         return jsonify([])
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=int(os.environ.get("PUERTO",5000)))
+    app.run(host="0.0.0.0",port=int(os.environ.get("PORT",5000)))
