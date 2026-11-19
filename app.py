@@ -7,6 +7,20 @@ from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
+# Cache para no pegarle a Yahoo a cada rato
+CACHE = {}
+CACHE_TIEMPO = 600  # 10 minutos
+
+def esta_en_cache(ticker):
+    if ticker in CACHE:
+        datos, cuando = CACHE[ticker]
+        if time.time() - cuando < CACHE_TIEMPO:
+            return datos
+    return None
+
+def guardar_en_cache(ticker, datos):
+    CACHE[ticker] = (datos, time.time())
+
 # ================= MEMORIA COMPARTIDA (BLACKBOARD) =================
 class MemoriaCompartida:
     """Donde los agentes se dejan mensajes entre ellos"""
