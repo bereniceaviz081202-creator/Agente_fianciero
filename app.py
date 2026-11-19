@@ -63,10 +63,10 @@ class AgenteMonitorYahoo:
             except:
                 return ""
         datos = {
-            "empresa":obtener(info,"longName"),
+            "empresa":obtener_texto(info,"longName"),
             "precio":obtener(info,"currentPrice"),
-            "moneda":obtener(info,"currency"),
-            "sector":obtener(info,"sector"),
+            "moneda":obtener_texto(info,"currency"),
+            "sector":obtener_texto(info,"sector"),
             "activo_circulante":obtener(balance,"Total Current Assets"),
             "pasivo_circulante":obtener(balance,"Total Current Liabilities"),
             "activo_total":obtener(balance,"Total Assets"),
