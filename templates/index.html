@@ -1,21 +1,64 @@
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sistema Multiagente</title>
-<style>body{font-family:Arial;background:#f5f5f5;padding:20px} .card{background:white;padding:20px;border-radius:12px;border-left:6px solid #f9a825} input{padding:10px} button{padding:10px 15px;background:black;color:white;border:none;border-radius:6px;cursor:pointer}</style>
+<title>Sistema Multiagente - Análisis de Insolvencia</title>
+<style>
+*{box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#0a2a5c;margin:0;padding:0;color:#1e293b}
+.top{background:#0a2a5c;color:white;padding:22px 16px 10px;text-align:center}
+.top img{width:190px;height:190px;object-fit:cover;border-radius:50%;border:4px solid white;box-shadow:0 8px 25px rgba(0,0,0,.4);background:white}
+.top h1{margin:12px 0 0;font-size:23px;line-height:1.2}
+.top p{margin:8px 0 0;opacity:.85;font-size:14px}
+.flow{max-width:900px;margin:14px auto 0;background:rgba(255,255,255,.15);padding:10px 12px;border-radius:999px;font-size:12px;font-weight:600}
+.wrap{max-width:900px;margin:0 auto;padding:18px 16px 40px}
+.search-card{background:white;padding:20px;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.3);text-align:center}
+.search-card h2{margin:0 0 6px;font-size:18px}
+.search-card span{color:#1e5aa8}
+.search-card p{margin:0 0 14px;color:#64748b;font-size:13px}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+input#ticker{padding:13px 14px;border:2px solid #dbe4f0;border-radius:12px;font-size:15px;min-width:260px;flex:1;max-width:420px;outline:none}
+input#ticker:focus{border-color:#1e5aa8}
+button{padding:13px 22px;background:#1e5aa8;color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer}
+button:hover{background:#0f2a5c}
+#sugerencias{background:white;border:1px solid #ddd;border-radius:12px;display:none;max-height:250px;overflow:auto;text-align:left;max-width:560px;margin:10px auto 0}
+.chips{margin:14px 0 4px;display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.chips b{width:100%;font-size:12px;color:#64748b;text-transform:uppercase}
+.chip{background:#eef4ff;color:#1e5aa8;border:1px solid #cbd9f5;padding:6px 12px;border-radius:999px;font-size:13px;cursor:pointer}
+#contenedor{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-top:18px}
+#colIzq{flex:1;min-width:300px}
+#colDer{flex:1;min-width:300px;background:white;padding:18px;border-radius:16px;display:none}
+#colDer h3{margin:0 0 10px;font-size:16px}
+.footer{text-align:center;color:rgba(255,255,255,.7);font-size:12px;margin-top:20px}
+@media(max-width:600px){.top h1{font-size:20px}.row{flex-direction:column}input#ticker{max-width:100%}button{width:100%}}
+</style>
 </head><body>
-<h2>🤖 Sistema Multiagente Autónomo - 5 Agentes</h2>
-<div style="background:black;color:#00ff41;padding:10px;border-radius:8px;font-size:12px">AGENTE-SUPERVISOR coordina → [MONITOR-YAHOO] → [ANALISTA] → [PREDICTOR] → [ESTRATEGA]</div><br>
-<input id="ticker" placeholder="Ej: AAPL, AMXL.MX"><button onclick="analizar()">🔍 Analizar</button>
-<div id="sugerencias" style="background:white; border:1px solid #ddd; border-radius:8px; display:none; max-height:250px; overflow:auto; position:relative; width:100%; z-index:99;"></div>
-<p>Prueba: AAPL, MSFT, AMXL.MX, WALMEX.MX, CEMEX.MX</p>
-<div id="contenedor" style="display:flex;gap:15px;align-items:flex-start;flex-wrap:wrap">
-<div id="colIzq" style="flex:1;min-width:300px"><div id="resultado"></div></div>
-<div id="colDer" style="flex:1;min-width:300px;background:white;padding:15px;border-radius:12px;display:none">
-<h3>Precio últimos 6 meses</h3><canvas id="grafPrecio"></canvas>
-<h3 style="margin-top:20px">Salud Financiera</h3><canvas id="grafSalud"></canvas>
-<h3 style="margin-top:20px">Z-Altman</h3>
-<div style="height:30px;border-radius:15px;background:#eee;overflow:hidden"><div id="barraZ" style="height:100%;width:0%;background:green"></div></div><p id="textoZ"></p>
-</div></div>
+<div class="top">
+<img src="/static/logo2.png">
+<h1>Sistema Multiagente Autónomo<br>Análisis de Insolvencia</h1>
+<p>5 agentes inteligentes trabajando en equipo</p>
+<div class="flow">SUPERVISOR → MONITOR-YAHOO → ANALISTA → PREDICTOR → ESTRATEGA</div>
+</div>
+<div class="wrap">
+<div class="search-card">
+<h2>Analiza una empresa en <span>tiempo real</span></h2>
+<p>Escribe el ticker de la empresa, ejemplo: AAPL o AMXL.MX</p>
+<div class="row">
+<input id="ticker" placeholder="Ej: AAPL, AMXL.MX" autocomplete="off">
+<button onclick="analizar()">🔍 Analizar</button>
+</div>
+<div id="sugerencias"></div>
+<div class="chips"><b>Prueba con:</b><span class="chip" onclick="document.getElementById('ticker').value='AAPL';analizar()">AAPL</span><span class="chip" onclick="document.getElementById('ticker').value='MSFT';analizar()">MSFT</span><span class="chip" onclick="document.getElementById('ticker').value='AMXL.MX';analizar()">AMXL.MX</span><span class="chip" onclick="document.getElementById('ticker').value='WALMEX.MX';analizar()">WALMEX.MX</span><span class="chip" onclick="document.getElementById('ticker').value='CEMEX.MX';analizar()">CEMEX.MX</span></div>
+</div>
+<div id="contenedor">
+<div id="colIzq"><div id="resultado"></div></div>
+<div id="colDer">
+<h3>📈 Precio últimos 6 meses</h3><canvas id="grafPrecio"></canvas>
+<h3 style="margin-top:22px">💚 Salud Financiera</h3><canvas id="grafSalud"></canvas>
+<h3 style="margin-top:22px">⚖️ Z-Altman</h3>
+<div style="height:30px;border-radius:15px;background:#eee;overflow:hidden"><div id="barraZ" style="height:100%;width:0%;background:#22c55e;transition:.6s"></div></div><p id="textoZ"></p>
+</div>
+</div>
+<p class="footer">Proyecto escolar • Sistema Multiagente • Datos de Yahoo Finance</p>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/static/graficas.js"></script>
 </body></html>
