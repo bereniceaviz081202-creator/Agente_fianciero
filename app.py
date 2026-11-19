@@ -236,19 +236,19 @@ def buscar():
     if not ticker:
         return jsonify({"error":"Escribe un ticker"}), 400
 
-    # Si ya está en memoria, no le pedimos a Yahoo
-for item in MEMORIA.historial:
-    if item.get("ticker") == ticker:
-        return jsonify(item)
-    
+    # Si ya esta en memoria, no le pedimos a Yahoo
+    for item in MEMORIA.historial:
+        if item.get("ticker") == ticker:
+            return jsonify(item)
+
     try:
-        # AQUÍ VA TU CÓDIGO QUE YA TIENES PARA PEDIRLE A YAHOO
-        # ... no lo borres, déjalo tal cual ...
+        # AQUI VA TU CODIGO QUE YA TIENES PARA PEDIRLE A YAHOO
+        # ... no lo borres, dejalo tal cual ...
         pass
     except Exception as e:
         if "429" in str(e) or "Too Many" in str(e) or "Rate" in str(e):
-            return jsonify({"error":"Yahoo está saturado ahorita, espera 15 min y prueba con AAPL que ya está guardado"}), 429
-        return jsonify({"error": "Yahoo esta saturado por tantas consultas, espera 20 min y prueba con AAPL que ya esta guardado"}), 429
+            return jsonify({"error":"Yahoo esta saturado ahorita, espera 15 min y prueba con AAPL que ya esta guardado"}), 429
+        return jsonify({"error":"Yahoo esta saturado por tantas consultas, espera 20 min y prueba con AAPL que ya esta guardado"}), 429
         
     ticker = request.args.get("ticker","").strip()
     try:
