@@ -9,7 +9,6 @@ app = Flask(__name__)
 
 # Cache para no pegarle a Yahoo a cada rato
 CACHE = {}
-if time.time() - cuando > 7 * 24 * 3600:
 
 ARCHIVO_CACHE = "cache.json"
 
@@ -57,7 +56,7 @@ class MemoriaCompartida:
 MEMORIA = MemoriaCompartida()
 
 CACHE = {}
-CACHE_TIEMPO = 15 * 60
+CACHE_TIEMPO = 7 * 24 * 3600
 
 # ================= AGENTE 1: MONITOR YAHOO =================
 class AgenteMonitorYahoo:
