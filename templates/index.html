@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sistema Multiagente</title>
+<style>body{font-family:Arial;background:#f5f5f5;padding:20px} .card{background:white;padding:20px;border-radius:12px;border-left:6px solid #f9a825} input{padding:10px} button{padding:10px 15px;background:black;color:white;border:none;border-radius:6px;cursor:pointer}</style>
+</head><body>
+<h2>🤖 Sistema Multiagente Autónomo - 5 Agentes</h2>
+<div style="background:black;color:#00ff41;padding:10px;border-radius:8px;font-size:12px">AGENTE-SUPERVISOR coordina → [MONITOR-YAHOO] → [ANALISTA] → [PREDICTOR] → [ESTRATEGA]</div><br>
+<input id="ticker" placeholder="Ej: AAPL, AMXL.MX"><button onclick="analizar()">🔍 Analizar</button>
+<p>Prueba: AAPL, MSFT, AMXL.MX, WALMEX.MX, CEMEX.MX</p>
+<div id="contenedor" style="display:flex;gap:15px;align-items:flex-start;flex-wrap:wrap">
+<div id="colIzq" style="flex:1;min-width:300px"><div id="resultado"></div></div>
+<div id="colDer" style="flex:1;min-width:300px;background:white;padding:15px;border-radius:12px;display:none">
+<h3>Precio últimos 6 meses</h3><canvas id="grafPrecio"></canvas>
+<h3 style="margin-top:20px">Salud Financiera</h3><canvas id="grafSalud"></canvas>
+<h3 style="margin-top:20px">Z-Altman</h3>
+<div style="height:30px;border-radius:15px;background:#eee;overflow:hidden"><div id="barraZ" style="height:100%;width:0%;background:green"></div></div><p id="textoZ"></p>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/static/graficas.js"></script>
+</body></html>
