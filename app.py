@@ -1,6 +1,6 @@
 # app.py - SISTEMA MULTIAGENTE REAL - 5 agentes autónomos
 # Sin tokens, sin OpenAI, 100% gratis con Yahoo Finance
-import os, json
+import os, json, time
 from datetime import datetime
 import yfinance as yf
 from flask import Flask, render_template_string, request, jsonify
