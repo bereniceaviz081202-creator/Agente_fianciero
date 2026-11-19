@@ -85,13 +85,12 @@ class AgenteMonitorYahoo:
             guardar_cache()
             memoria.escribir(self.nombre, "datos_crudos", datos)
             return datos
-
-    except Exception as e:
-        print(f"[{self.nombre}] Yahoo saturado: {e}")
-        if ticker in CACHE:
-            print(f"[{self.nombre}] Usando último dato guardado")
-            return CACHE[ticker][0]
-        return {"error": "Yahoo está saturado en este momento. Intenta en 5 minutos."}
+        except Exception as e:
+            print(f"[{self.nombre}] Yahoo saturado: {e}")
+            if ticker in CACHE:
+                print(f"[{self.nombre}] Usando datos del CACHE")
+                return CACHE[ticker][0]
+            return {"error": str(e)}
         def obtener(df,nombre):
             try:
                 if isinstance(df, dict):
