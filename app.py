@@ -161,38 +161,17 @@ class AgenteSupervisor:
 SUPERVISOR = AgenteSupervisor()
 
 # ================= WEB =================
-HTML = """
-<!DOCTYPE html><html><head><meta charset="utf-8"><title>Multiagente Insolvencia</title>
-<style>body{font-family:Arial;padding:20px;background:#f4f4f4;max-width:900px;margin:auto}
-.card{background:white;padding:20px;border-radius:12px;margin:15px 0;box-shadow:0 2px 8px #ccc}
-.red{border-left:8px solid red}.orange{border-left:8px solid orange}.green{border-left:8px solid green}
-input{padding:12px;width:200px;font-size:16px} button{padding:12px 20px;background:#000;color:white;border:none;border-radius:8px;cursor:pointer}
-.agentes{background:#000;color:#0f0;padding:10px;border-radius:8px;font-family:monospace;font-size:12px}</style></head><body>
-<h1>🤖 Sistema Multiagente Autónomo - 5 Agentes</h1>
-<div class="agentes">AGENTE-SUPERVISOR coordina → [MONITOR-YAHOO] → [ANALISTA] → [PREDICTOR] → [ESTRATEGA]</div><br>
-<form action="/buscar" method="GET"><input name="ticker" placeholder="Ej: AAPL, AMXL.MX" required><button>🔍 Analizar</button></form>
-<p>Prueba: AAPL, MSFT, AMXL.MX, WALMEX.MX, CEMEX.MX</p>
-{% for r in datos %}
-<div class="card {{r.color}}"><h2>{{r.empresa}}</h2>
-<p><b>Precio:</b> {{r.precio}} {{r.moneda}} | <b>Sector:</b> {{r.sector}}</p>
-<h3>{{r.nivel}} | Z-Altman: {{r.z_altman}} | Springate: {{r.z_springate}}</h3>
-<p>Liquidez: {{r.liquidez|round(2)}} | Endeudamiento: {{r.endeudamiento|round(2)}} | ROA: {{r.roa|round(3)}}</p>
-<b>Acciones del Agente Estratega:</b><ul>{% for a in r.acciones %}<li>{{a}}</li>{% endfor %}</ul>
-<p><small>Procesado por 4 agentes + 1 supervisor. Ciclo #{{ciclos}}</small></p></div>
-{% endfor %}
-{% if error %}<div class="card red">{{error}}</div>{% endif %}
-</body></html>
-"""
 @app.route("/")
-def home(): return render_template_string(HTML, datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=None)
+def home():
+    return render_template("index.html", datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=None))
 @app.route("/buscar")
 def buscar():
     ticker = request.args.get("ticker","").strip()
     try:
         SUPERVISOR.ejecutar_flujo(ticker, MEMORIA)
-        return render_template_string(HTML, datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=None)
+return render_template("index.html", datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=None)
     except Exception as e:
-        return render_template_string(HTML, datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=f"Ticker '{ticker}' no encontrado. Error: {str(e)[:120]}")
+return render_template("index.html", datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=f"Ticker '{ticker}' no encontrado. Error: {str(e)[:120]}"))
 @app.route("/ping")
 def ping(): return "OK"
 @app.route("/api/ticker/<ticker>")
