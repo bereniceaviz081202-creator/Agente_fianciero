@@ -3,7 +3,7 @@
 import os, json, time
 from datetime import datetime
 import yfinance as yf
-from flask import Flask, render_template_string, request, jsonify
+from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
