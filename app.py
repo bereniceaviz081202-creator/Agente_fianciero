@@ -66,13 +66,13 @@ class AgenteMonitorYahoo:
     
         # 1. Buscar en lo guardado
         datos_cache = esta_en_cache(ticker)
-        if datos_cache:
+    if datos_cache:
         print(f"[{self.nombre}] Usando CACHE para {ticker}")
         memoria.escribir(self.nombre, "datos_crudos", datos_cache)
         return datos_cache
 
-        print(f"[{self.nombre}] Buscando {ticker}...")
-        try:
+    print(f"[{self.nombre}] Buscando {ticker}...")
+    try:
         time.sleep(1)
         tk = yf.Ticker(ticker)
         info = tk.info
