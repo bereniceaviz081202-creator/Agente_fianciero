@@ -212,7 +212,7 @@ def buscar():
     except Exception as e:
         if "429" in str(e) or "Too Many" in str(e) or "Rate" in str(e):
             return jsonify({"error":"Yahoo está saturado ahorita, espera 15 min y prueba con AAPL que ya está guardado"}), 429
-        return jsonify({"error":"No se pudo analizar, intenta con otro ticker"}), 500
+        return jsonify({"error": "Yahoo esta saturado por tantas consultas, espera 20 min y prueba con AAPL que ya esta guardado"}), 429
         
     ticker = request.args.get("ticker","").strip()
     try:
