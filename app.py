@@ -138,11 +138,8 @@ class AgenteAnalista:
     """Agente 2: Solo calcula ratios, no decide nada"""
     nombre = "AGENTE-ANALISTA"
     def ejecutar(self, datos, ratios, memoria=None):
-            if memoria is None:
-        class _Dummy:
-            def escribir(self, *a, **k):
-                pass
-        memoria = _Dummy()
+        if memoria is None:
+            memoria = type("Dummy", (), {"escribir": lambda *a, **k: None})()
         def div(a, b):
             try:
                 a = float(a or 0)
