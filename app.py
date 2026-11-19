@@ -61,7 +61,7 @@ CACHE_TIEMPO = 7 * 24 * 3600
 class AgenteMonitorYahoo:
     """Agente 1: Solo se encarga de buscar en Yahoo Finance"""
     nombre = "AGENTE-MONITOR-YAHOO"
-    def ejecutar(self, ticker, memoria):
+    def ejecutar(self, datos, ratios, memoria=None):
         ticker = ticker.strip().upper()
     
         # 1. Buscar en lo guardado
