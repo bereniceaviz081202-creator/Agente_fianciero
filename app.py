@@ -35,10 +35,10 @@ class AgenteMonitorYahoo:
         resultados = tk.financials
         flujo = tk.cashflow
         def obtener(df,nombre):
-            intentar:
-                regresar flotar(df.loc[nombre].iloc[0])
-            excepto:
-                regresar 0
+            try:
+                return float(df.loc[nombre].iloc[0])
+            except:
+                return 0
         datos = {
             "empresa":obtener(info,"longName"),
             "precio":obtener(info,"currentPrice"),
