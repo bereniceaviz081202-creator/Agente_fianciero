@@ -49,10 +49,10 @@ inputBuscar.addEventListener('input', () => {
             <b>${item.ticker}</b> - ${item.nombre} <span style="color:#888; font-size:12px;">${item.bolsa} - ${item.moneda}</span>
         </div>
     `).join('');
+    divSug.style.display = 'block';
     }, 500);
 });
-    divSug.style.display = 'block';
-})
+
 
 function elegirTicker(ticker) {
     divSug.style.display = 'none';
