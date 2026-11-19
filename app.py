@@ -80,7 +80,7 @@ class AgenteMonitorYahoo:
             balance = tk.balance_sheet
             resultados = tk.financials
             flujo = tk.cashflow
-            datos = {"info": info, "balance": balance, "resultados": resultados, "flujo": flujo}
+            datos = {"info": info}
             CACHE[ticker] = (datos, time.time())
             guardar_cache()
             memoria.escribir(self.nombre, "datos_crudos", datos)
