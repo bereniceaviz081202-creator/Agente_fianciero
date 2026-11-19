@@ -171,7 +171,7 @@ def buscar():
         SUPERVISOR.ejecutar_flujo(ticker, MEMORIA)
 return render_template("index.html", datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=None)
     except Exception as e:
-return render_template("index.html", datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=f"Ticker '{ticker}' no encontrado. Error: {str(e)[:120]}"))
+return render_template("index.html", datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=f"Ticker '{ticker}' no encontrado. Error: {str(e)[:120]}")
 @app.route("/ping")
 def ping(): return "OK"
 @app.route("/api/ticker/<ticker>")
