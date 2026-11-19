@@ -192,6 +192,17 @@ def api_ticker(ticker):
                 resultado["historial_precio"] = {"fechas": fechas, "precios": precios}
         except Exception as e:
             print("Error historial:", e)
+        # Limpiar NaN / Inf para que el JSON sea válido
+        import math
+        def limpiar(o):
+            if isinstance(o, dict):
+                return {k: limpiar(v) for k, v in o.items()}
+            if isinstance(o, list):
+                return [limpiar(v) for v in o]
+            if isinstance(o, float) and (math.isnan(o) or math.isinf(o)):
+                return None
+            return o
+        resultado = limpiar(resultado)
         return jsonify(resultado)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
