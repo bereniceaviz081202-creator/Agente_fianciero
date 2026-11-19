@@ -190,8 +190,6 @@ class AgentePredictor:
             z_altman = 0.717*X1 + 0.847*X2 + 3.107*X3 + 0.420*X4 + 0.998*X5
             modelo_z = "Z' Altman (privada - valor en libros)"
         z_springate = 1.03*X1 + 3.07*X3 + 0.66*div(datos.get("utilidad_neta") or 0, datos.get("pasivo_circulante") or 0) + 0.4*X5
-            modelo_z = "Z' Altman (privada - valor en libros)"
-        z_springate = 1.03*X1 + 3.07*X3 + 0.66*div(datos["utilidad_neta"], datos["pasivo_circulante"]) + 0.4*X5
         if z_altman < 1.23: nivel, color, prob = "🔴 CRITICO", "red", 0.85
         elif z_altman < 2.90: nivel, color, prob = "🟡 ALERTA", "orange", 0.45
         else: nivel, color, prob = "🟢 SALUDABLE", "green", 0.10
