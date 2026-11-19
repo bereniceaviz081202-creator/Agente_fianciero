@@ -1,5 +1,5 @@
 # app.py - SISTEMA MULTIAGENTE REAL - 5 agentes autónomos
-# Sin tokens, sin OpenAI, 100% gratis con Yahoo Finance
+# Sin tokens, sin OpenAI, 100% gratis con fuentes financieras confiables
 import os, json, time
 from datetime import datetime
 import yfinance as yf
@@ -9,7 +9,27 @@ app = Flask(__name__)
 
 # Cache para no pegarle a Yahoo a cada rato
 CACHE = {}
-CACHE_TIEMPO = 600  # 10 minutos
+CACHE_TIEMPO = 2592000  # 30 días, casi ilimitado
+
+ARCHIVO_CACHE = "cache.json"
+
+def cargar_cache():
+    if os.path.exists(ARCHIVO_CACHE):
+        try:
+            with open(ARCHIVO_CACHE, "r") as f:
+                return json.load(f)
+        except:
+            return {}
+    return {}
+
+def guardar_cache():
+    try:
+        with open(ARCHIVO_CACHE, "w") as f:
+            json.dump(CACHE, f)
+    except Exception as e:
+        print(f"No se pudo guardar cache: {e}")
+
+CACHE = cargar_cache()
 
 def esta_en_cache(ticker):
     if ticker in CACHE:
@@ -43,19 +63,38 @@ CACHE_TIEMPO = 15 * 60
 class AgenteMonitorYahoo:
     """Agente 1: Solo se encarga de buscar en Yahoo Finance"""
     nombre = "AGENTE-MONITOR-YAHOO"
-    def ejecutar(self, ticker, memoria):
-        ticker = ticker.strip().upper()
-        if ticker in CACHE and time.time() - CACHE[ticker][0] < CACHE_TIEMPO:
-            print(f"[{self.nombre}] Usando CACHE para {ticker}")
-            datos_cache = CACHE[ticker][1]
-            memoria.escribir(self.nombre, "datos_crudos", datos_cache)
-            return datos_cache
-        print(f"[{self.nombre}] Buscando {ticker}...")
+def ejecutar(self, ticker):
+    ticker = ticker.strip().upper()
+    
+    # 1. Buscar en lo guardado
+    datos_cache = esta_en_cache(ticker)
+    if datos_cache:
+        print(f"[{self.nombre}] Usando CACHE para {ticker}")
+        memoria.escribir(self.nombre, "datos_crudos", datos_cache)
+        return datos_cache
+
+    print(f"[{self.nombre}] Buscando {ticker}...")
+    try:
+        time.sleep(1)
         tk = yf.Ticker(ticker)
         info = tk.info
+        time.sleep(1)
         balance = tk.balance_sheet
         resultados = tk.financials
         flujo = tk.cashflow
+
+        datos = {"info": info, "balance": balance, "resultados": resultados, "flujo": flujo}
+        CACHE[ticker] = (datos, time.time())
+        guardar_cache()
+        memoria.escribir(self.nombre, "datos_crudos", datos)
+        return datos
+
+    except Exception as e:
+        print(f"[{self.nombre}] Yahoo saturado: {e}")
+        if ticker in CACHE:
+            print(f"[{self.nombre}] Usando último dato guardado")
+            return CACHE[ticker][0]
+        return {"error": "Yahoo está saturado en este momento. Intenta en 5 minutos."}
         def obtener(df,nombre):
             try:
                 if isinstance(df, dict):
