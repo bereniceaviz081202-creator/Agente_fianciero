@@ -14,11 +14,15 @@ function dibujarGraficas(rep){
   document.getElementById('textoZ').innerText='Z = '+z+' - '+texto;
 }
 async function analizar(){
-  let t=document.getElementById('ticker').value.trim().toUpperCase();
-  if(!t){alert('Escribe un ticker, ej: AAPL'); return;}
-  document.getElementById('resultado').innerHTML='<p>Analizando '+t+'...</p>';
+  let entrada=document.getElementById('ticker').value.trim();
+  if(!entrada){alert('Escribe un nombre o ticker, ej: CEMEX, Apple'); return;}
+  document.getElementById('resultado').innerHTML='<p>Buscando '+entrada+'...</p>';
   try{
-    let r=await fetch('/api/ticker/'+t);
+  let rb=await fetch('/api/buscar_nombre?q='+encodeURIComponent(entrada));
+  let db=await rb.json();
+  let t=(db.ticker||entrada).toUpperCase();
+  document.getElementById('resultado').innerHTML='<p>Analizando '+t+'...</p>';
+  let r=await fetch('/api/ticker/'+t);
     let data=await r.json();
     if(data.error){alert(data.error); return;}
     let rep=data.reporte || data;
