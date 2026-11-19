@@ -208,6 +208,10 @@ def buscar():
         return render_template("index.html", datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=f"Ticker '{ticker}' no encontrado. Error: {str(e)[:120]}")
 @app.route("/ping")
 def ping():return "Aceptar"
+
+@app.route("/acerca")
+def acerca():return render_template("acerca.html")
+    
 @app.route("/api/ticker/<ticker>")
 def api_ticker(ticker):
     try:
