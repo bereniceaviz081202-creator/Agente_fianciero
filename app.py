@@ -206,6 +206,39 @@ def api_ticker(ticker):
         return jsonify(resultado)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+@app.route("/api/buscar_nombre")
+def buscar_nombre():
+    from flask import request
+    import requests
+    q = request.args.get("q", "").strip()
+    if not q:
+        return jsonify({"error": "Escribe un nombre"}), 400
+    mapa = {
+        "CEMEX": "CEMEXCPO.MX",
+        "CEMEX.MX": "CEMEXCPO.MX",
+        "WALMART": "WALMEX.MX",
+        "WALMEX": "WALMEX.MX",
+        "AMERICA MOVIL": "AMXB.MX",
+        "AMXL": "AMXB.MX",
+        "AMX": "AMXB.MX",
+        "APPLE": "AAPL",
+        "MICROSOFT": "MSFT",
+        "TESLA": "TSLA",
+        "AMAZON": "AMZN",
+        "GOOGLE": "GOOGL",
+    }
+    clave = q.upper()
+    if clave in mapa:
+        return jsonify({"ticker": mapa[clave], "nombre": q})
+    try:
+        url = "https://query2.finance.yahoo.com/v1/finance/search"
+        r = requests.get(url, params={"q": q, "quotesCount": 1}, headers={"User-Agent": "Mozilla/5.0"}, timeout=5)
+        data = r.json()
+        if data.get("quotes"):
+            return jsonify({"ticker": data["quotes"][0]["symbol"], "nombre": data["quotes"][0].get("shortname", q)})
+    except Exception as e:
+        print("Error buscar_nombre:", e)
+    return jsonify({"ticker": q.upper(), "nombre": q})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=int(os.environ.get("PUERTO",5000)))
