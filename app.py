@@ -263,5 +263,31 @@ def buscar_nombre():
         ticker = q.upper()
     return jsonify({"ticker": ticker, "nombre": q})
 
+@app.route("/api/sugerencias")
+def sugerencias():
+    from flask import request
+    import requests
+    q = request.args.get("q", "").strip()
+    if not q:
+        return jsonify([])
+    try:
+        url = "https://query2.finance.yahoo.com/v1/finance/search"
+        r = requests.get(url, params={"q": q, "quotesCount": 15, "newsCount": 0}, headers={"User-Agent": "Mozilla/5.0"}, timeout=6)
+        data = r.json()
+        lista = []
+        for x in data.get("quotes", []):
+            if x.get("quoteType") != "EQUITY" or not x.get("symbol"):
+                continue
+            lista.append({
+                "ticker": x.get("symbol"),
+                "nombre": x.get("shortname") or x.get("longname") or x.get("symbol"),
+                "bolsa": x.get("exchDisp") or x.get("exchange") or "",
+                "moneda": x.get("currency") or ""
+            })
+        return jsonify(lista)
+    except Exception as e:
+        print("Error sugerencias:", e)
+        return jsonify([])
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=int(os.environ.get("PUERTO",5000)))
