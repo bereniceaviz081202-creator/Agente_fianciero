@@ -179,8 +179,22 @@ def buscar():
 @app.route("/ping")
 def ping():return "Aceptar"
 @app.route("/api/ticker/<ticker>")
-def api(ticker):
-    return jsonify(SUPERVISOR.ejecutar_flujo(ticker, MEMORIA))
+def api_ticker(ticker):
+    try:
+        resultado = SUPERVISOR.ejecutar_flujo(ticker, MEMORIA)
+        # Agregar historial 6 meses para las gráficas
+        try:
+            import yfinance as yf
+            h = yf.Ticker(ticker).history(period="6mo")
+            if not h.empty:
+                fechas = [str(d.date()) for d in h.index]
+                precios = [round(float(x), 2) for x in h['Close'].tolist()]
+                resultado["historial_precio"] = {"fechas": fechas, "precios": precios}
+        except Exception as e:
+            print("Error historial:", e)
+        return jsonify(resultado)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=int(os.environ.get("PUERTO",5000)))
