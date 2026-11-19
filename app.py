@@ -36,9 +36,24 @@ class AgenteMonitorYahoo:
         flujo = tk.cashflow
         def obtener(df,nombre):
             try:
-                return float(df.loc[nombre].iloc[0])
+                if isinstance(df, dict):
+                    v = df.get(nombre, 0)
+                    return float(v or 0)
+                if isinstance(df, (tuple, list)):
+                    return 0
+                valor = df.loc[nombre]
+                while hasattr(valor, "iloc"):
+                    valor = valor.iloc[0]
+                return float(valor)
             except:
                 return 0
+        def obtener_texto(df,nombre):
+            try:
+                if isinstance(df, dict):
+                    return str(df.get(nombre, "") or "")
+                return ""
+            except:
+                return ""
         datos = {
             "empresa":obtener(info,"longName"),
             "precio":obtener(info,"currentPrice"),
