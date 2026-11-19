@@ -209,7 +209,7 @@ def api_ticker(ticker):
 @app.route("/api/buscar_nombre")
 def buscar_nombre():
     from flask import request
-    import requests
+    import requests, re
     q = request.args.get("q", "").strip()
     if not q:
         return jsonify({"error": "Escribe un nombre"}), 400
@@ -217,28 +217,36 @@ def buscar_nombre():
         "CEMEX": "CEMEXCPO.MX",
         "CEMEX.MX": "CEMEXCPO.MX",
         "WALMART": "WALMEX.MX",
-        "WALMEX": "WALMEX.MX",
         "AMERICA MOVIL": "AMXB.MX",
         "AMXL": "AMXB.MX",
-        "AMX": "AMXB.MX",
-        "APPLE": "AAPL",
-        "MICROSOFT": "MSFT",
-        "TESLA": "TSLA",
-        "AMAZON": "AMZN",
-        "GOOGLE": "GOOGL",
     }
-    clave = q.upper()
+    clave = q.upper().strip()
     if clave in mapa:
         return jsonify({"ticker": mapa[clave], "nombre": q})
-    try:
-        url = "https://query2.finance.yahoo.com/v1/finance/search"
-        r = requests.get(url, params={"q": q, "quotesCount": 1}, headers={"User-Agent": "Mozilla/5.0"}, timeout=5)
-        data = r.json()
-        if data.get("quotes"):
-            return jsonify({"ticker": data["quotes"][0]["symbol"], "nombre": data["quotes"][0].get("shortname", q)})
-    except Exception as e:
-        print("Error buscar_nombre:", e)
-    return jsonify({"ticker": q.upper(), "nombre": q})
+    def buscar_yahoo(termino):
+        try:
+            url = "https://query2.finance.yahoo.com/v1/finance/search"
+            r = requests.get(url, params={"q": termino, "quotesCount": 10, "newsCount": 0}, headers={"User-Agent": "Mozilla/5.0"}, timeout=6)
+            data = r.json()
+            quotes = data.get("quotes", [])
+            acciones = [x for x in quotes if x.get("quoteType") == "EQUITY" and x.get("symbol")]
+            if not acciones:
+                acciones = quotes
+            if acciones:
+                for x in acciones:
+                    nombre = (x.get("shortname","") + " " + x.get("longname","")).lower()
+                    if termino.lower() in nombre or nombre in termino.lower():
+                        return x["symbol"]
+                return acciones[0]["symbol"]
+        except Exception as e:
+            print("Error buscar_yahoo:", e)
+        return None
+    ticker = buscar_yahoo(q)
+    if not ticker:
+        ticker = buscar_yahoo(q + " Mexico")
+    if not ticker:
+        ticker = q.upper()
+    return jsonify({"ticker": ticker, "nombre": q})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=int(os.environ.get("PUERTO",5000)))
