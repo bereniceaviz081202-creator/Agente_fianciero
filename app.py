@@ -139,10 +139,10 @@ class AgenteAnalista:
     nombre = "AGENTE-ANALISTA"
     def ejecutar(self, datos, memoria):
         def div(a,b): return a/b if b!=0 else 0
-        cap = datos["activo_circulante"] - datos["pasivo_circulante"]
+        cap = datos.get("activo_circulante", 0) - datos.get("pasivo_circulante", 0)
         ratios = {
             "capital_trabajo": cap,
-            "liquidez": div(datos["activo_circulante"], datos["pasivo_circulante"]),
+            "liquidez": div(datos.get("activo_circulante", 0), datos.get("pasivo_circulante", 0)),
             "endeudamiento": div(datos["pasivo_total"], datos["activo_total"]),
             "roa": div(datos["utilidad_neta"], datos["activo_total"]),
             "roe": div(datos["utilidad_neta"], datos["patrimonio"]),
