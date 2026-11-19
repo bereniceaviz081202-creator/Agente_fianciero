@@ -32,3 +32,26 @@ async function analizar(){
     dibujarGraficas(rep);
   }catch(e){ alert('Error: '+e); }
 }
+const inputBuscar = document.getElementById('ticker');
+const divSug = document.getElementById('sugerencias');
+
+inputBuscar.addEventListener('input', async () => {
+    const q = inputBuscar.value.trim();
+    if (q.length < 2) { divSug.style.display = 'none'; return; }
+    const res = await fetch(`/api/sugerencias?q=${encodeURIComponent(q)}`);
+    const lista = await res.json();
+    if (!lista.length) { divSug.style.display = 'none'; return; }
+    divSug.innerHTML = lista.map(item => `
+        <div onclick="elegirTicker('${item.ticker}')"
+             style="padding:10px; cursor:pointer; border-bottom:1px solid #eee;">
+            <b>${item.ticker}</b> - ${item.nombre} <span style="color:#888; font-size:12px;">${item.bolsa} - ${item.moneda}</span>
+        </div>
+    `).join('');
+    divSug.style.display = 'block';
+})
+
+function elegirTicker(ticker) {
+    divSug.style.display = 'none';
+    inputBuscar.value = ticker;
+    analizar();
+}
