@@ -31,6 +31,11 @@ class AgenteMonitorYahoo:
     nombre = "AGENTE-MONITOR-YAHOO"
     def ejecutar(self, ticker, memoria):
         ticker = ticker.strip().upper()
+        if ticker in CACHE and time.time() - CACHE[ticker][0] < CACHE_TIEMPO:
+            print(f"[{self.nombre}] Usando CACHE para {ticker}")
+            datos_cache = CACHE[ticker][1]
+            memoria.escribir(self.nombre, "datos_crudos", datos_cache)
+            return datos_cache
         print(f"[{self.nombre}] Buscando {ticker}...")
         tk = yf.Ticker(ticker)
         info = tk.info
@@ -73,6 +78,7 @@ class AgenteMonitorYahoo:
             "utilidad_operativa":obtener(resultados,"Operating Income"),
             "flujo_operativo":obtener(flujo,"Operating Cash Flow"),
         }
+        CACHE[ticker] = (time.time(), datos)
         memoria.escribir(self.nombre, "datos_crudos", datos)
         return datos
 
