@@ -77,6 +77,8 @@ class AgenteMonitorYahoo:
             "utilidad_neta":obtener(resultados,"Net Income"),
             "utilidad_operativa":obtener(resultados,"Operating Income"),
             "flujo_operativo":obtener(flujo,"Operating Cash Flow"),
+            "capitalizacion_mercado":obtener(info,"marketCap"),
+            "acciones_en_circulacion":obtener(info,"sharesOutstanding"),
         }
         CACHE[ticker] = (time.time(), datos)
         memoria.escribir(self.nombre, "datos_crudos", datos)
@@ -111,15 +113,29 @@ class AgentePredictor:
         X1 = div(ratios["capital_trabajo"], datos["activo_total"])
         X2 = div(datos["utilidades_retenidas"], datos["activo_total"])
         X3 = div(datos["utilidad_operativa"], datos["activo_total"])
-        X4 = div(datos["patrimonio"], datos["pasivo_total"])
         X5 = ratios["rotacion_activos"]
-        z_altman = 0.717*X1 + 0.847*X2 + 3.107*X3 + 0.420*X4 + 0.998*X5
+        cap_mercado = datos.get("capitalizacion_mercado", 0) or 0
+        if cap_mercado > 0:
+            X4 = div(cap_mercado, datos["pasivo_total"])
+            z_altman = 1.2*X1 + 1.4*X2 + 3.3*X3 + 0.6*X4 + 1.0*X5
+            modelo_z = "Z Altman Original (publica - usa mercado)"
+        else:
+            X4 = div(datos["patrimonio"], datos["pasivo_total"])
+            z_altman = 0.717*X1 + 0.847*X2 + 3.107*X3 + 0.420*X4 + 0.998*X5
+            modelo_z = "Z' Altman (privada - valor en libros)"
         z_springate = 1.03*X1 + 3.07*X3 + 0.66*div(datos["utilidad_neta"], datos["pasivo_circulante"]) + 0.4*X5
         if z_altman < 1.23: nivel, color, prob = "🔴 CRITICO", "red", 0.85
         elif z_altman < 2.90: nivel, color, prob = "🟡 ALERTA", "orange", 0.45
         else: nivel, color, prob = "🟢 SALUDABLE", "green", 0.10
+        if prob < 0.30:
+            etiqueta_riesgo = "Riesgo Bajo"
+        elif prob < 0.60:
+            etiqueta_riesgo = "Riesgo Moderado - Zona Gris"
+        else:
+            etiqueta_riesgo = "Riesgo Alto"
         pred = {"z_altman": round(z_altman,2), "z_springate": round(z_springate,2),
-                "nivel": nivel, "color": color, "prob_insolvencia": prob}
+                "nivel": nivel, "color": color, "prob_insolvencia": prob,
+                "modelo_z": modelo_z, "etiqueta_riesgo": etiqueta_riesgo}
         memoria.escribir(self.nombre, "prediccion", pred)
         return pred
 
