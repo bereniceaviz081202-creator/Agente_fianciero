@@ -81,11 +81,11 @@ class AgenteMonitorYahoo:
             resultados = tk.financials
             flujo = tk.cashflow
 
-        datos = {"info": info, "balance": balance, "resultados": resultados, "flujo": flujo}
-        CACHE[ticker] = (datos, time.time())
-        guardar_cache()
-        memoria.escribir(self.nombre, "datos_crudos", datos)
-        return datos
+            datos = {"info": info, "balance": balance, "resultados": resultados, "flujo": flujo}
+            CACHE[ticker] = (datos, time.time())
+            guardar_cache()
+            memoria.escribir(self.nombre, "datos_crudos", datos)
+            return datos
 
     except Exception as e:
         print(f"[{self.nombre}] Yahoo saturado: {e}")
