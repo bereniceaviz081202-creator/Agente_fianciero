@@ -160,23 +160,24 @@ class AgenteSupervisor:
 
 SUPERVISOR = AgenteSupervisor()
 
-# ================= WEB =================
+# ===== WEB =====
 @app.route("/")
-def home():
+def inicio():
     return render_template("index.html", datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=None)
+
 @app.route("/buscar")
 def buscar():
     ticker = request.args.get("ticker","").strip()
     try:
         SUPERVISOR.ejecutar_flujo(ticker, MEMORIA)
         return render_template("index.html", datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=None)
-        except Exception as e:
+    except Exception as e:
         return render_template("index.html", datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=f"Ticker '{ticker}' no encontrado. Error: {str(e)[:120]}")
 @app.route("/ping")
-def ping(): return "OK"
+def ping():return "Aceptar"
 @app.route("/api/ticker/<ticker>")
 def api(ticker):
     return jsonify(SUPERVISOR.ejecutar_flujo(ticker, MEMORIA))
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT",5000)))
+    app.run(host="0.0.0.0",port=int(os.environ.get("PUERTO",5000)))
