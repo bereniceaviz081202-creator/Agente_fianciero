@@ -219,6 +219,21 @@ def buscar_nombre():
         "WALMART": "WALMEX.MX",
         "AMERICA MOVIL": "AMXB.MX",
         "AMXL": "AMXB.MX",
+            mapa = {
+        "CEMEX": "CEMEXCPO.MX",
+        "CEMEX.MX": "CEMEXCPO.MX",
+        "WALMART": "WALMEX.MX",
+        "AMERICA MOVIL": "AMXB.MX",
+        "AMXL": "AMXB.MX",
+        "MELI": "MELI",
+        "MERCADO LIBRE": "MELI",
+        "MERCADOLIBRE": "MELI",
+        "MELIA": "MEL.MC",
+        "MELIA HOTELS": "MEL.MC",
+        "LIVERPOOL": "LIVEPOLC-1.MX",
+        "LIVERPOOL MEXICO": "LIVEPOLC-1.MX",
+        "EL PUERTO DE LIVERPOOL": "LIVEPOLC-1.MX",
+        "LIVEPOL": "LIVEPOLC-1.MX",
     }
     clave = q.upper().strip()
     if clave in mapa:
