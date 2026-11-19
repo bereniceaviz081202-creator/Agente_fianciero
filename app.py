@@ -62,7 +62,7 @@ class AgenteMonitorYahoo:
     """Agente 1: Solo se encarga de buscar en Yahoo Finance"""
     nombre = "AGENTE-MONITOR-YAHOO"
     def ejecutar(self, datos, ratios, memoria=None):
-        ticker = ticker.strip().upper()
+        ticker = str(datos.get("ticker", "") if isinstance(datos, dict) else datos).strip().upper()
     
         # 1. Buscar en lo guardado
         datos_cache = esta_en_cache(ticker)
