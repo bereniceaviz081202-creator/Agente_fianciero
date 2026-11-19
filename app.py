@@ -197,6 +197,26 @@ def inicio():
 
 @app.route("/buscar")
 def buscar():
+
+@app.route("/buscar")
+def buscar():
+    ticker = request.args.get("ticker","").strip().upper()
+    if not ticker:
+        return jsonify({"error":"Escribe un ticker"}), 400
+
+    # Si ya está en memoria, no le pedimos a Yahoo
+    if ticker in MEMORIA:
+        return jsonify(MEMORIA[ticker])
+
+    try:
+        # AQUÍ VA TU CÓDIGO QUE YA TIENES PARA PEDIRLE A YAHOO
+        # ... no lo borres, déjalo tal cual ...
+        pass
+    except Exception as e:
+        if "429" in str(e) or "Too Many" in str(e) or "Rate" in str(e):
+            return jsonify({"error":"Yahoo está saturado ahorita, espera 15 min y prueba con AAPL que ya está guardado"}), 429
+        return jsonify({"error":"No se pudo analizar, intenta con otro ticker"}), 500
+        
     ticker = request.args.get("ticker","").strip()
     try:
         resultado = SUPERVISOR.ejecutar_flujo(ticker, MEMORIA)
