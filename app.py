@@ -172,20 +172,24 @@ class AgenteAnalista:
 class AgentePredictor:
     """Agente 3: Solo predice riesgo con Altman + Springate"""
     nombre = "AGENTE-PREDICTOR"
-    def ejecutar(self, datos, ratios, memoria):
+    def ejecutar(self, datos, ratios, memoria=None):
+        if memoria is None:
+            memoria = type("Dummy", (), {"escribir": lambda *a, **k: None})()
         def div(a,b): return a/b if b!=0 else 0
-        X1 = div(ratios["capital_trabajo"], datos["activo_total"])
-        X2 = div(datos["utilidades_retenidas"], datos["activo_total"])
-        X3 = div(datos["utilidad_operativa"], datos["activo_total"])
-        X5 = ratios["rotacion_activos"]
+        X1 = div(ratios.get("capital_trabajo") or 0, datos.get("activo_total") or 0)
+        X2 = div(datos.get("utilidades_retenidas") or 0, datos.get("activo_total") or 0)
+        X3 = div(datos.get("utilidad_operativa") or 0, datos.get("activo_total") or 0)
+        X5 = ratios.get("rotacion_activos") or 0
         cap_mercado = datos.get("capitalizacion_mercado", 0) or 0
         if cap_mercado > 0:
-            X4 = div(cap_mercado, datos["pasivo_total"])
+            X4 = div(cap_mercado, datos.get("pasivo_total") or 0)
             z_altman = 1.2*X1 + 1.4*X2 + 3.3*X3 + 0.6*X4 + 1.0*X5
             modelo_z = "Z Altman Original (publica - usa mercado)"
         else:
-            X4 = div(datos["patrimonio"], datos["pasivo_total"])
+            X4 = div(datos.get("patrimonio") or 0, datos.get("pasivo_total") or 0)
             z_altman = 0.717*X1 + 0.847*X2 + 3.107*X3 + 0.420*X4 + 0.998*X5
+            modelo_z = "Z' Altman (privada - valor en libros)"
+        z_springate = 1.03*X1 + 3.07*X3 + 0.66*div(datos.get("utilidad_neta") or 0, datos.get("pasivo_circulante") or 0) + 0.4*X5
             modelo_z = "Z' Altman (privada - valor en libros)"
         z_springate = 1.03*X1 + 3.07*X3 + 0.66*div(datos["utilidad_neta"], datos["pasivo_circulante"]) + 0.4*X5
         if z_altman < 1.23: nivel, color, prob = "🔴 CRITICO", "red", 0.85
