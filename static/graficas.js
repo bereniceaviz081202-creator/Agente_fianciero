@@ -34,8 +34,10 @@ async function analizar(){
 }
 const inputBuscar = document.getElementById('ticker');
 const divSug = document.getElementById('sugerencias');
-
-inputBuscar.addEventListener('input', async () => {
+let timerSug;
+inputBuscar.addEventListener('input', () => {
+    clearTimeout(timerSug);
+    timerSug = setTimeout(async () => {
     const q = inputBuscar.value.trim();
     if (q.length < 2) { divSug.style.display = 'none'; return; }
     const res = await fetch(`/api/sugerencias?q=${encodeURIComponent(q)}`);
@@ -47,6 +49,8 @@ inputBuscar.addEventListener('input', async () => {
             <b>${item.ticker}</b> - ${item.nombre} <span style="color:#888; font-size:12px;">${item.bolsa} - ${item.moneda}</span>
         </div>
     `).join('');
+          }, 500);
+});
     divSug.style.display = 'block';
 })
 
