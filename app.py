@@ -137,18 +137,31 @@ class AgenteMonitorYahoo:
 class AgenteAnalista:
     """Agente 2: Solo calcula ratios, no decide nada"""
     nombre = "AGENTE-ANALISTA"
-    def ejecutar(self, datos, memoria):
-        def div(a,b): return a/b if b!=0 else 0
-        cap = datos.get("activo_circulante", 0) - datos.get("pasivo_circulante", 0)
+    def ejecutar(self, datos, ratios, memoria):
+        def div(a, b):
+            try:
+                a = float(a or 0)
+                b = float(b or 0)
+            except:
+                return 0
+            return a / b if b != 0 else 0
+
+        def num(x):
+            try:
+                return float(x or 0)
+            except:
+                return 0
+
+        cap = num(datos.get("activo_circulante")) - num(datos.get("pasivo_circulante"))
         ratios = {
             "capital_trabajo": cap,
-            "liquidez": div(datos.get("activo_circulante", 0), datos.get("pasivo_circulante", 0)),
-            "endeudamiento": div(datos["pasivo_total"], datos["activo_total"]),
-            "roa": div(datos["utilidad_neta"], datos["activo_total"]),
-            "roe": div(datos["utilidad_neta"], datos["patrimonio"]),
-            "margen_neto": div(datos["utilidad_neta"], datos["ventas"]),
-            "rotacion_activos": div(datos["ventas"], datos["activo_total"]),
-            "cobertura_flujo": div(datos["flujo_operativo"], datos["pasivo_circulante"]),
+            "liquidez": div(datos.get("activo_circulante"), datos.get("pasivo_circulante")),
+            "endeudamiento": div(datos.get("pasivo_total"), datos.get("activo_total")),
+            "roa": div(datos.get("utilidad_neta"), datos.get("activo_total")),
+            "roe": div(datos.get("utilidad_neta"), datos.get("patrimonio")),
+            "margen_neto": div(datos.get("utilidad_neta"), datos.get("ventas")),
+            "rotacion_activos": div(datos.get("ventas"), datos.get("activo_total")),
+            "cobertura_flujo": div(datos.get("flujo_operativo"), datos.get("pasivo_circulante")),
         }
         memoria.escribir(self.nombre, "ratios", ratios)
         return ratios
