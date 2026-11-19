@@ -3,17 +3,6 @@
 <title>Sistema Multiagente - Análisis de Insolvencia</title>
 <style>
 *{box-sizing:border-box}
-  <a href="/acerca" style="text-decoration:none; color:black; display:block;">
-  <div style="background:#f0f0f0; padding:15px; border-radius:12px; margin:15px; border: 2px solid #007bff; cursor:pointer;">
-    <h2>📋 Acerca de la Aplicación ➡️</h2>
-    <p><b>Da clic aquí</b> para ver toda la información de la app</p>
-    <p style="color:#007bff;"><b>Ver información completa →</b></p>
-  </div>
-</a>
-  <p><b>Nombre:</b> Insolvencia Multiagente</p>
-  <p><b>Autores:</b> Berenice Avila Diaz>
-Proyecto escolar • <a href="/acerca" style="color:white; text-decoration:underline; font-weight:bold;">📋 Acerca de la Aplicación</a> • Sistema Multiagente • Datos de Yahoo Finance
-</div>
 body{font-family:'Segoe UI',Arial,sans-serif;background:#0a2a5c;margin:0;padding:0;color:#1e293b}
 .top{background:#0a2a5c;color:white;padding:22px 16px 10px;text-align:center}
 .top img{width:190px;height:190px;object-fit:cover;border-radius:50%;border:4px solid white;box-shadow:0 8px 25px rgba(0,0,0,.4);background:white}
@@ -58,6 +47,13 @@ button:hover{background:#0f2a5c}
 <div id="sugerencias"></div>
 <div class="chips"><b>Prueba con:</b><span class="chip" onclick="document.getElementById('ticker').value='AAPL';analizar()">AAPL</span><span class="chip" onclick="document.getElementById('ticker').value='MSFT';analizar()">MSFT</span><span class="chip" onclick="document.getElementById('ticker').value='AMXL.MX';analizar()">AMXL.MX</span><span class="chip" onclick="document.getElementById('ticker').value='WALMEX.MX';analizar()">WALMEX.MX</span><span class="chip" onclick="document.getElementById('ticker').value='CEMEX.MX';analizar()">CEMEX.MX</span></div>
 </div>
+<a href="/acerca" style="text-decoration:none; color:black; display:block;">
+  <div style="background:#f0f0f0; padding:15px; border-radius:12px; margin:15px 0; border: 2px solid #007bff; cursor:pointer;">
+    <h2>📋 Acerca de la Aplicación ➡️</h2>
+    <p><b>Da clic aquí</b> para ver toda la información de la app</p>
+    <p style="color:#007bff;"><b>Ver información completa →</b></p>
+  </div>
+</a>
 <div id="contenedor">
 <div id="colIzq"><div id="resultado"></div></div>
 <div id="colDer">
@@ -67,7 +63,7 @@ button:hover{background:#0f2a5c}
 <div style="height:30px;border-radius:15px;background:#eee;overflow:hidden"><div id="barraZ" style="height:100%;width:0%;background:#22c55e;transition:.6s"></div></div><p id="textoZ"></p>
 </div>
 </div>
-<p class="footer">Proyecto escolar • Sistema Multiagente • Datos de Yahoo Finance</p>
+<p class="footer">Proyecto escolar • <a href="/acerca" style="color:white; text-decoration:underline; font-weight:bold;">📋 Acerca de la Aplicación</a> • Sistema Multiagente • Datos de Yahoo Finance</p>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/static/graficas.js"></script>
