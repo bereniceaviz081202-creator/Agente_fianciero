@@ -22,6 +22,9 @@ class MemoriaCompartida:
 
 MEMORIA = MemoriaCompartida()
 
+CACHE = {}
+CACHE_TIEMPO = 15 * 60
+
 # ================= AGENTE 1: MONITOR YAHOO =================
 class AgenteMonitorYahoo:
     """Agente 1: Solo se encarga de buscar en Yahoo Finance"""
