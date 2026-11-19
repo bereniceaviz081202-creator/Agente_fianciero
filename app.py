@@ -163,7 +163,7 @@ SUPERVISOR = AgenteSupervisor()
 # ================= WEB =================
 @app.route("/")
 def home():
-    return render_template("index.html", datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=None))
+    return render_template("index.html", datos=MEMORIA.historial, ciclos=MEMORIA.ciclos, error=None)
 @app.route("/buscar")
 def buscar():
     ticker = request.args.get("ticker","").strip()
