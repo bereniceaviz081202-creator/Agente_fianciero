@@ -211,6 +211,10 @@ def ping():return "Aceptar"
 @app.route("/api/ticker/<ticker>")
 def api_ticker(ticker):
     try:
+        cacheado = esta_en_cache(ticker)
+        if cacheado:
+            return jsonify(cacheado)
+        time.sleep(1)        
         resultado = SUPERVISOR.ejecutar_flujo(ticker, MEMORIA)
         # Agregar historial 6 meses para las gráficas
         try:
