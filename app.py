@@ -235,8 +235,9 @@ def api_ticker(ticker):
                 return [limpiar(v) for v in o]
             if isinstance(o, float) and (math.isnan(o) or math.isinf(o)):
                 return None
-            return o
+            return o            
         resultado = limpiar(resultado)
+        guardar_en_cache(ticker, resultado)        
         return jsonify(resultado)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
