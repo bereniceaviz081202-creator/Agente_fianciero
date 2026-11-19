@@ -197,9 +197,6 @@ def inicio():
 
 @app.route("/buscar")
 def buscar():
-
-@app.route("/buscar")
-def buscar():
     ticker = request.args.get("ticker","").strip().upper()
     if not ticker:
         return jsonify({"error":"Escribe un ticker"}), 400
