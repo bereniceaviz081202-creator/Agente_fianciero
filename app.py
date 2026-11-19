@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Cache para no pegarle a Yahoo a cada rato
 CACHE = {}
-CACHE_TIEMPO = 2592000  # 30 días, casi ilimitado
+if time.time() - cuando > 7 * 24 * 3600:
 
 ARCHIVO_CACHE = "cache.json"
 
