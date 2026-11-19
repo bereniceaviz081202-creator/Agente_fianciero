@@ -219,7 +219,6 @@ def buscar_nombre():
         "WALMART": "WALMEX.MX",
         "AMERICA MOVIL": "AMXB.MX",
         "AMXL": "AMXB.MX",
-            mapa = {
         "CEMEX": "CEMEXCPO.MX",
         "CEMEX.MX": "CEMEXCPO.MX",
         "WALMART": "WALMEX.MX",
